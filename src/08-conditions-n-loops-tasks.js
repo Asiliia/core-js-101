@@ -369,10 +369,14 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const elem = (i) => (a) => a[i];
+  const arrTemp = pathes.map((fold) => fold.replace(/\//g, '/ ').split(' '));
+  const arrHand = arrTemp[0].map((el, i) => arrTemp.map(elem(i)));
+  const pathFilter = (arr) => arr.every((e) => e === arr[0]);
+  const arrFilter = arrHand.filter(pathFilter);
+  return arrFilter.map(elem(0)).join('');
 }
-
 
 /**
  * Returns the product of two specified matrixes.
@@ -392,8 +396,20 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const res = [];
+  for (let y = 0; y < m1.length; y += 1) {
+    const horiz = [];
+    for (let x = 0; x < m2[0].length; x += 1) {
+      let sum = 0;
+      for (let i = 0; i < m2.length; i += 1) {
+        sum += m1[y][i] * m2[i][x];
+      }
+      horiz.push(sum);
+    }
+    res.push(horiz);
+  }
+  return res;
 }
 
 
@@ -427,8 +443,30 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  if (position[0][0] && position[0][0] === position[1][1]
+    && position[1][1] === position[2][2]) {
+    return position[0][0];
+  }
+
+
+  if (position[0][2] && position[0][2] === position[1][1]
+      && position[1][1] === position[2][0]) {
+    return position[0][2];
+  }
+
+  for (let i = 0; i < position.length; i += 1) {
+    if (position[i][0] && position[i][0] === position[i][1]
+       && position[i][1] === position[i][2]) {
+      return position[i][1];
+    }
+    if (position[0][i] && position[0][i] === position[1][i]
+        && position[0][i] === position[2][i]) {
+      return position[0][i];
+    }
+  }
+
+  return undefined;
 }
 
 
